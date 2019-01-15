@@ -2,6 +2,7 @@
 #include "syntax.tab.h"
 #include "../semantic/include/analyze.h"
 #include "../IR/include/translate.h"
+#include "../object/include/assembly.h"
 
 extern void yyrestart (FILE *input_file);
 extern int no_syn_error;
@@ -30,15 +31,31 @@ int main(int argc, char** argv){
         return 1;
     }
 
-    struct InterCode* IChead = translate_Program(syntaxTree);
+    struct InterCode *IC_head = translate_Program(syntaxTree);
+
+    init_regList();
+    init_variList();
+    init_funVList(IC_head);
+
+    #ifdef A_DIAG_MODE
+    printf("====INTER CODE====\n");
+    printInterCode(IC_head);
+
+    printf("\n====INITIALIZING====\n");
+    printFunVList();
+    
+    printf("\n====TRANSLATION====\n");
+    #endif
+
+    struct Assembly* object_head = translate_IC(IC_head);
+
     if (argc >= 3){
         f = fopen(argv[2], "w");
-        writeInterCode(f, IChead);
+        writeAssembly(f, object_head);
         fclose(f);
         printf("Translation Done!\n");
     }
     else
-        printInterCode(IChead);
-    
+        printInterCode(IC_head);
     return 0;
 }

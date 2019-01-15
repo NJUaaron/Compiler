@@ -8,7 +8,7 @@
 struct InterCode{
     enum{ASSIGN, OPERATION, LABEL, _RETURN, GOTO, _RELOP, CALL, READ, WRITE, ARG, PARAM, WRITEMEM, DEC, FUNC} kind;
     struct{
-        int vari_no;    //如果是-1则不打印该语句
+        int vari_no;    //如果是-2表示表达式没有左值，不打印该语句（CALL除外）
     } result;
     struct{
         int type;    //0:variable  1:立即数  2:地址（前面加&） 3:指针（前面加*）

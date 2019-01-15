@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "assembly.h": "c",
+        "translate.h": "c"
+    }
+}

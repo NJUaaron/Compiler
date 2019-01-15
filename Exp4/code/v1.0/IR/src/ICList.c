@@ -181,7 +181,7 @@ struct InterCode* c_func(char* func){
 
 void printInterCode(struct InterCode* head){
     for (struct InterCode* ptr = head; ptr != NULL; ptr = ptr->next){
-        if (ptr->result.vari_no == -1)
+        if (ptr->result.vari_no == -2 && ptr->kind != CALL)
             continue;
         switch(ptr->kind){
         case ASSIGN:
@@ -247,7 +247,10 @@ void printInterCode(struct InterCode* head){
             break;
             
         case CALL:
-            printf("t%d := CALL %s", ptr->result.vari_no, ptr->func_name);
+            if (ptr->result.vari_no == -2)  //没有返回值
+                printf("CALL %s", ptr->func_name);
+            else
+                printf("t%d := CALL %s", ptr->result.vari_no, ptr->func_name);
             break;
 
         case READ:
@@ -300,7 +303,7 @@ void printInterCode(struct InterCode* head){
 
 void writeInterCode(FILE* f, struct InterCode* head){
     for (struct InterCode* ptr = head; ptr != NULL; ptr = ptr->next){
-        if (ptr->result.vari_no == -1)
+        if (ptr->result.vari_no == -2 && ptr->kind != CALL)
             continue;
         switch(ptr->kind){
         case ASSIGN:
@@ -366,7 +369,10 @@ void writeInterCode(FILE* f, struct InterCode* head){
             break;
             
         case CALL:
-            fprintf(f, "t%d := CALL %s", ptr->result.vari_no, ptr->func_name);
+            if (ptr->result.vari_no == -2)  //没有返回值
+                printf("CALL %s", ptr->func_name);
+            else
+                printf("t%d := CALL %s", ptr->result.vari_no, ptr->func_name);
             break;
 
         case READ:
